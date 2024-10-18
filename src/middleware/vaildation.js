@@ -15,6 +15,7 @@ export const generalFields = {
         .message('Date of birth must be in format YYYY-M-D or YYYY-MM-DD'),
     objectId: joi.string().hex().length(24),
     otp: joi.string().length(6),
+    
 }
 
 export const isValid = (schema) => {
