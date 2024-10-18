@@ -23,6 +23,7 @@ export const messages = {
         invalidPassword: "invalid password",
         passwordUpdated: "password updated successfully",
         invalidOTP: "invalid OTP",
+        otpSent: "OTP sent success0fully",
         failToUpdatePassword: "fail To Update Password",
         noAccountsFound: "no accounts found",
         missingIdentifier: "Both email and phone number are missing"
