@@ -2,7 +2,7 @@ import { model, Schema, Types } from "mongoose";
 
 // schema
 const lessonSchema = new Schema({
-    tittle: {
+    title: {
         type: String,
         trim: true,
         required: true
@@ -19,7 +19,7 @@ const lessonSchema = new Schema({
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',
-        required: false  // todo true
+        required: true
     }
 }, { timestamps: true })
 
