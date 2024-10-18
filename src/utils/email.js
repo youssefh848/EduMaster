@@ -7,11 +7,14 @@ export const sendEmail = async ({ to, subject, html }) => {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 
   await transporter.sendMail({
     to,
-    from: "'<EduMaster>' yossef.mahmoud.shared@gmail.com",
+    from: '"EduMaster🙌" <yossef.mahmoud.shared@gmail.com>',
     subject,
     html,
   });

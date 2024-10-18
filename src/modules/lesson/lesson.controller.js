@@ -17,7 +17,7 @@ export const addLesson = async (req, res, next) => {
         title,
         description,
         video,
-        // createdBy:req.authUser._id  todo
+        createdBy: req.authUser._id
     })
     // add to db
     const addedLesson = await lesson.save()
