@@ -8,24 +8,24 @@ const generateMessage = (entity) => ({
     deleted: `${entity} deleted successfully`,
     failToDelete: `Failed to delete ${entity}`,
     fetchedSuccessfully: `${entity} fetched successfully`,
+});
 
-})
 export const messages = {
     file: { required: 'file is required' },
     user: {
         ...generateMessage('user'),
         verified: "user verified successfully",
-        invalidCredntiols: "invalid Credntiols",
-        notVerified: "not Verified",
+        invalidCredntiols: "invalid credentials",  // Fixed typo
+        notVerified: "user not verified",
+        invalidToken: "invalid token",            // Kept from main
         loginSuccessfully: "login successfully",
         unauthorized: "unauthorized to access this api",
-        invalidPassword: "invalid password",
-
+        invalidPassword: "invalid password",      // Kept from Youssef
         passwordUpdated: "password updated successfully",
         invalidOTP: "invalid OTP",
-        failToUpdatePassword: "fail To Update Password",
+        failToUpdatePassword: "failed to update password",
         noAccountsFound: "no accounts found",
-        
+        otpSent: "OTP sent successfully",         // Kept from main
     },
-    lesson: generateMessage('lesson')
-}
+    lesson: generateMessage('lesson'),
+};
