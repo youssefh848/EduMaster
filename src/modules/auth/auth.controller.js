@@ -19,7 +19,7 @@ export const signup = async (req, res, next) => {
 
   // Check for password match
   if (password !== cpassword) {
-      return next(new AppError(messages.user.invalidPassword, 400));
+      return next(new AppError(messages.user.invalidCredntiols, 400));
   }
 
   // Hash the password
@@ -104,7 +104,7 @@ export const login = async (req, res, next) => {
   // Check if password is correct
   const isPasswordValid = bcrypt.compareSync(password, user.password);
   if (!isPasswordValid) {
-      return next(new AppError(messages.user.invalidPassword, 400)); // Invalid password
+      return next(new AppError(messages.user.invalidCredntiols, 400)); // Invalid password
   }
 
   // Check if user is verified
