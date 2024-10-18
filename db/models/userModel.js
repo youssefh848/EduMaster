@@ -14,11 +14,11 @@ const userSchema = new Schema({
         unique: true,
     },
     classLevel: {
-      type: String,
-      required: true,
-      enum: Object.values(highSchool), 
-      default: highSchool.G_1_SECONDARY
-  },
+        type: String,
+        required: true,
+        enum: Object.values(highSchool), 
+        default: highSchool.G_1_SECONDARY
+    },
     email: {
         type: String,
         required: true,
@@ -36,10 +36,14 @@ const userSchema = new Schema({
         required: true,
     },
     role: {
-      type: String,
-      enum: Object.values(roles),
-      default: roles.USER 
-  }
+        type: String,
+        enum: Object.values(roles),
+        default: roles.USER 
+    },
+    isVerified: {
+        type: Boolean,
+        default: false 
+    }
 }, { timestamps: true });
 
 // Model
