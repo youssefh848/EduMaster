@@ -1,11 +1,11 @@
-import { APPError } from "../utils/appError.js"
+import { AppError } from "../utils/appError.js"
 
 // asyncHandler
 export const asyncHandler = (fn) => {
     return (req, res, next) => {
         fn(req, res, next)
             .catch((err) => {
-                next(new APPError(err.message, err.statusCode || 500))
+                next(new AppError(err.message, err.statusCode || 500))
             })
     }
 }
