@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { highSchool,  roles } from "../../src/utils/constant/enums.js";
 
 // schema
 const userSchema = new Schema({
@@ -15,8 +16,8 @@ const userSchema = new Schema({
     classLevel: {
       type: String,
       required: true,
-      enum: Object.values(classLevels), 
-      default: classLevels.GRADE_1
+      enum: Object.values(highSchool), 
+      default: highSchool.G_1_SECONDARY
   },
     email: {
         type: String,
@@ -33,7 +34,12 @@ const userSchema = new Schema({
     cpassword: {
         type: String,
         required: true,
-    }
+    },
+    role: {
+      type: String,
+      enum: Object.values(roles),
+      default: roles.USER 
+  }
 }, { timestamps: true });
 
 // Model
