@@ -20,10 +20,12 @@ export const messages = {
         loginSuccessfully: "login successfully",
         unauthorized: "unauthorized to access this api",
         invalidPassword: "invalid password",
+
         passwordUpdated: "password updated successfully",
         invalidOTP: "invalid OTP",
         failToUpdatePassword: "fail To Update Password",
         noAccountsFound: "no accounts found",
+        
     },
     lesson: generateMessage('lesson')
 }
