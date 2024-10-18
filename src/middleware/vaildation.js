@@ -13,7 +13,7 @@ export const generalFields = {
         .message('Date of birth must be in format YYYY-M-D or YYYY-MM-DD'),
     objectId: joi.string().hex().length(24),
     otp: joi.string().length(6),
-    tittle: joi.string(),
+    title: joi.string(),
     description: joi.string().min(10).max(1000),
     video: joi.string().pattern(new RegExp(/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/)),
 }
@@ -24,7 +24,7 @@ export const isValid = (schema) => {
         const { error } = schema.validate(data, { abortEarly: false })
         if (error) {
             const errorMessage = error.details.map(detail => detail.message).join(', ');
-            return next(new (errorMessage, 400));
+            return next(new AppError(errorMessage, 400));
         }
         next()
     }

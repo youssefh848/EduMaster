@@ -2,7 +2,7 @@ import { model, Schema, Types } from "mongoose";
 
 // schema
 const lessonSchema = new Schema({
-    tittle: {
+    title: {
         type: String,
         trim: true,
         required: true
