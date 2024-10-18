@@ -20,13 +20,11 @@ export const messages = {
         invalidToken: "invalid Token",
         loginSuccessfully: "login successfully",
         unauthorized: "unauthorized to access this api",
-        invalidPassword: "invalid password",
         passwordUpdated: "password updated successfully",
         invalidOTP: "invalid OTP",
-        otpSent: "OTP sent success0fully",
         failToUpdatePassword: "fail To Update Password",
         noAccountsFound: "no accounts found",
-        missingIdentifier: "Both email and phone number are missing"
+        otpSent: "OTP sent successfully",
     },
     lesson: generateMessage('lesson')
 }
