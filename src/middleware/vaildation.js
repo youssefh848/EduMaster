@@ -1,6 +1,6 @@
 // import modules
 import joi from 'joi';
-import { APPError } from '../utils/appError.js';
+import { AppError } from '../utils/appError.js';
 
 export const generalFields = {
     name: joi.string(),
@@ -21,7 +21,7 @@ export const isValid = (schema) => {
         const { error } = schema.validate(data, { abortEarly: false })
         if (error) {
             const errorMessage = error.details.map(detail => detail.message).join(', ');
-            return next(new APPError(errorMessage, 400));
+            return next(new AppError(errorMessage, 400));
         }
         next()
     }
