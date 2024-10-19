@@ -74,7 +74,7 @@ export const verifyAccount = async (req, res, next) => {
 
     // Check if user was found and updated
     if (!updatedUser) {
-        return next(new AppError(messages.user.notFound, 404));
+        return next(new AppError(messages.user.notExist, 404));
     }
 
     // Send success response
