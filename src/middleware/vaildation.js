@@ -8,6 +8,7 @@ export const generalFields = {
     email: joi.string().email(),
     password: joi.string().pattern(new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/)),
     cpassword: joi.string().valid(joi.ref('password')),
+    confirmPassword: joi.string().valid(joi.ref('newPassword')),
     phoneNumber: joi.string().pattern(new RegExp(/^01[0-2,5]{1}[0-9]{8}$/)),
     classLevel: joi.string().valid(...Object.values(highSchool)),
     DOB: joi.string()
