@@ -28,4 +28,6 @@ export const messages = {
         otpSent: "OTP sent successfully",         // Kept from main
     },
     lesson: generateMessage('lesson'),
+    question: generateMessage('question'),
+    exam: generateMessage('exam'),
 };
