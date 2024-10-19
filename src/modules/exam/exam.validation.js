@@ -9,6 +9,6 @@ export const addExamVal = joi.object({
   questions: generalFields.questions,
   classLevel: generalFields.classLevel.required(),
   isPublished: generalFields.isPublished,
-  startDate: generalFields.startDate.required(),
-  endDate: generalFields.endDate.required(),
+  startDate: generalFields.startDate,
+  endDate: generalFields.endDate,
 });

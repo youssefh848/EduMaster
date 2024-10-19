@@ -12,8 +12,6 @@ export const addExam = async (req, res, next) => {
     questions,
     classLevel,
     isPublished,
-    startDate,
-    endDate,
   } = req.body;
 
   // Check if exam with the same title already exists
@@ -21,6 +19,13 @@ export const addExam = async (req, res, next) => {
   if (existingExam) {
     return next(new AppError(messages.exam.alreadyExist, 400));
   }
+
+    // Set the start date to the current time
+    const startDate = new Date();
+
+    // Calculate endDate based on startDate and duration (in minutes)
+    const endDate = new Date(new Date(startDate).getTime() + duration * 60000); 
+
 
   // Prepare data for the new exam
   const exam = new Exam({
