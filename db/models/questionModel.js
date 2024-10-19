@@ -17,7 +17,6 @@ const questionSchema = new Schema(
     options: [
       {
         type: String,
-        required: () => this.type === questionTypes.MULTIPLE_CHOICE ,
       },
     ],
     correctAnswer: {
