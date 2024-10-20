@@ -16,8 +16,7 @@ const userSchema = new Schema({
     classLevel: {
         type: String,
         required: true,
-        enum: Object.values(highSchool),
-        default: highSchool.G_1_SECONDARY
+        enum: Object.values(highSchool)
     },
     email: {
         type: String,

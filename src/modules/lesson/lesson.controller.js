@@ -5,7 +5,7 @@ import { messages } from "../../utils/constant/messages.js";
 // add lesson 
 export const addLesson = async (req, res, next) => {
     // get data from req 
-    let { title, description, video } = req.body;
+    let { title, description, video, classLevel } = req.body;
     title = title.toLowerCase()
     // check existance
     const existLesson = await Lesson.findOne({ title });
@@ -17,6 +17,7 @@ export const addLesson = async (req, res, next) => {
         title,
         description,
         video,
+        classLevel,
         createdBy: req.authUser._id
     })
     // add to db
@@ -38,7 +39,7 @@ export const addLesson = async (req, res, next) => {
 export const updateLesson = async (req, res, next) => {
     // get data from req
     const { lessonId } = req.params;
-    let { title, description, video } = req.body;
+    let { title, description, video, classLevel } = req.body;
     title = title.toLowerCase()
     // check existance 
     const lessonExist = await Lesson.findById(lessonId)
@@ -54,6 +55,7 @@ export const updateLesson = async (req, res, next) => {
     if (title) lessonExist.title = title;
     if (description) lessonExist.description = description;
     if (video) lessonExist.video = video;
+    if (classLevel) lessonExist.classLevel = classLevel;
     // save update 
     const lessonUpdated = await lessonExist.save()
     // handel fail 
@@ -68,10 +70,12 @@ export const updateLesson = async (req, res, next) => {
     })
 }
 
-// get lessons
+// get lessons to spesefic classLevel
 export const getLessons = async (req, res, next) => {
+    // get data from req    
+    const classLevel = req.authUser.classLevel
     // get lessons
-    const lessons = await Lesson.find()
+    const lessons = await Lesson.find({ classLevel })
     // send res
     return res.status(200).json({
         message: messages.lesson.fetchedSuccessfully,
@@ -84,11 +88,16 @@ export const getLessons = async (req, res, next) => {
 export const getLessonById = async (req, res, next) => {
     // get data from req
     const { lessonId } = req.params;
+    const classLevel = req.authUser.classLevel
     // check existance
     const lessonExist = await Lesson.findById(lessonId)
     // handel fail
     if (!lessonExist) {
         return next(new AppError(messages.lesson.notExist, 404))
+    }
+    // check classLevel
+    if (lessonExist.classLevel !== classLevel) {
+        return next(new AppError(messages.user.unauthorized, 403))
     }
     // send res
     return res.status(200).json({
