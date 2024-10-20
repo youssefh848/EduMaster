@@ -50,9 +50,7 @@ const examSchema = new Schema(
       type: Date,
       required: true,
     },
-  },
-  { timestamps: true }
-);
+  }, { timestamps: true, });
 
 // virtual
 examSchema.virtual('Question',{

@@ -26,7 +26,7 @@ lessonRouter.put('/:lessonId',
     asyncHandler(updateLesson)
 )
 
-// get lessons 
+// get lessons to spesefic classLevel
 lessonRouter.get('/',
     isAuthenticated(),
     isAuthorized([roles.ADMIN, roles.USER]),

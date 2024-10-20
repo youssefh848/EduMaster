@@ -1,4 +1,5 @@
 import { model, Schema, Types } from "mongoose";
+import { highSchool } from "../../src/utils/constant/enums.js";
 
 // schema
 const lessonSchema = new Schema({
@@ -15,6 +16,11 @@ const lessonSchema = new Schema({
     video: {
         type: String,
         required: true
+    },
+    classLevel: {
+        type: String,
+        required: true,
+        enum: Object.values(highSchool),
     },
     createdBy: {
         type: Types.ObjectId,
