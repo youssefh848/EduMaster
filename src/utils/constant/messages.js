@@ -8,6 +8,7 @@ const generateMessage = (entity) => ({
     deleted: `${entity} deleted successfully`,
     failToDelete: `Failed to delete ${entity}`,
     fetchedSuccessfully: `${entity} fetched successfully`,
+    failToFetch: `${entity} failed to fetch`
 });
 
 export const messages = {
