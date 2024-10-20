@@ -52,6 +52,7 @@ export const addQuestion = async (req, res, next) => {
   });
 };
 
+// update question
 export const updateQuestion = async (req, res, next) => {
   const { questionId } = req.params; // Get question ID from params
   let { text, type, options, correctAnswer, points } = req.body; // Get question data from request body
@@ -90,9 +91,68 @@ export const updateQuestion = async (req, res, next) => {
   }
 
   // Send response with the updated question
-return res.status(200).json({
+  return res.status(200).json({
     message: messages.question.updated,
     success: true,
     data: questionUpdated,
-});
+  });
+};
+
+// get all questions
+export const getAllQuestions = async (req, res, next) => {
+  // Get all questions from the database
+  const questions = await Question.find();
+
+  // Send response
+  return res.status(200).json({
+    message: messages.question.fetchedSuccessfully,
+    success: true,
+    data: questions,
+  });
+};
+
+// get specific question
+export const getQuestionById = async (req, res, next) => {
+  // Get the question ID from the request params
+  const { questionId } = req.params;
+
+  // Find the question by ID and populate it to exam
+  const questionExist = await Question.findById(questionId).populate("exam");
+  // .populate("createdBy");
+
+  // If the question does not exist, return a 404 error
+  if (!questionExist) {
+    return next(new AppError(messages.question.notExist, 404));
+  }
+
+  // Send response with the fetched question
+  return res.status(200).json({
+    message: messages.question.fetchedSuccessfully,
+    success: true,
+    data: questionExist,
+  });
+};
+
+// delete question
+export const deleteQuestion = async (req, res, next) => {
+  // Get the question ID from the request params
+  const { questionId } = req.params;
+
+  // Check if the question exists
+  const questionExist = await Question.findById(questionId);
+  if (!questionExist) {
+    return next(new AppError(messages.question.notExist, 404));
+  }
+
+  // Delete the question
+  const deleteQuestion = await Question.findByIdAndDelete(questionId);
+  if (!deleteQuestion) {
+    return next(new AppError(messages.question.failToDelete, 500));
+  }
+
+  // Send response
+  return res.status(200).json({
+    message: messages.question.deleted,
+    success: true,
+  });
 };

@@ -25,3 +25,13 @@ export const updateExamVal = joi.object({
   endDate: generalFields.endDate.optional(),
   examId: generalFields.objectId.required()
 });
+
+// Get a specific exam by ID vaildation
+export const getExamByIDVal = joi.object({
+  examId: generalFields.objectId.required(),
+})
+
+// delete exam validation
+export const deleteExamVal = joi.object({
+  examId: generalFields.objectId.required(),
+})

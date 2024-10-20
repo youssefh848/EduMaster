@@ -3,9 +3,9 @@ import { isAuthenticated } from "../../middleware/authentication.js";
 import { isAuthorized } from "../../middleware/autheraization.js";
 import { roles } from "../../utils/constant/enums.js";
 import { isValid } from "../../middleware/vaildation.js";
-import { addExamVal, updateExamVal } from "./exam.validation.js";
+import { addExamVal, deleteExamVal, getExamByIDVal, updateExamVal } from "./exam.validation.js";
 import { asyncHandler } from "../../middleware/asyncHandler.js";
-import { addExam, updateExam } from "./exam.controller.js";
+import { addExam, deleteExam, getAllExams, getExamById, updateExam } from "./exam.controller.js";
 
 const examRouter = Router();
 
@@ -25,5 +25,28 @@ examRouter.put("/:examId",
   asyncHandler(updateExam)  
 );
 
+// Get all exams route
+examRouter.get("/",
+  isAuthenticated(),
+  isAuthorized([roles.ADMIN]),
+  asyncHandler(getAllExams)
+);
 
+
+// Get a specific exam by ID route
+examRouter.get('/get/:examId',
+  isAuthenticated(), 
+  isAuthorized([roles.ADMIN, roles.USER]),
+  isValid(getExamByIDVal),
+  asyncHandler(getExamById)
+);
+
+
+// Delete exam route
+examRouter.delete('/:examId',
+  isAuthenticated(),
+  isAuthorized([roles.ADMIN]), 
+  isValid(deleteExamVal),
+  asyncHandler(deleteExam)  
+);
 export default examRouter;

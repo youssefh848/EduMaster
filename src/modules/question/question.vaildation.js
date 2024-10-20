@@ -22,3 +22,13 @@ export const updateQuestionVal = joi.object({
     exam: generalFields.objectId.optional(),
     questionId: generalFields.objectId.required()
 });
+
+// get specific question validation
+export const getQuestionByIdVal = joi.object({
+    questionId: generalFields.objectId.required(),    
+})
+
+// delete question validation
+export const deleteQuestionVal = joi.object({
+    questionId: generalFields.objectId.required(),    
+})

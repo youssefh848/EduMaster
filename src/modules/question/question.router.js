@@ -3,9 +3,9 @@ import { isAuthenticated } from '../../middleware/authentication.js';
 import { isAuthorized } from '../../middleware/autheraization.js';
 import { roles } from '../../utils/constant/enums.js';
 import { isValid } from '../../middleware/vaildation.js';
-import { addQuestionVal, updateQuestionVal } from './question.vaildation.js';
+import { addQuestionVal, deleteQuestionVal, getQuestionByIdVal, updateQuestionVal } from './question.vaildation.js';
 import { asyncHandler } from '../../middleware/asyncHandler.js';
-import { addQuestion, updateQuestion } from './question.controller.js';
+import { addQuestion, deleteQuestion, getAllQuestions, getQuestionById, updateQuestion } from './question.controller.js';
 
 
 const questionRouter = Router();
@@ -25,5 +25,28 @@ questionRouter.put("/:questionId",
     isAuthorized([roles.ADMIN]),  
     isValid(updateQuestionVal), 
     asyncHandler(updateQuestion)  
+);
+
+// Get all questions route
+questionRouter.get('/',
+    isAuthenticated(), 
+    isAuthorized([roles.ADMIN]),  
+    asyncHandler(getAllQuestions)  
+);
+
+// Get a specific question by ID route
+questionRouter.get('/get/:questionId',
+    isAuthenticated(), 
+    isAuthorized([roles.ADMIN , roles.USER ]),
+    isValid(getQuestionByIdVal),  
+    asyncHandler(getQuestionById)  
+);
+
+// Delete question route
+questionRouter.delete('/:questionId',
+    isAuthenticated(),  
+    isAuthorized([roles.ADMIN]), 
+    isValid(deleteQuestionVal),
+    asyncHandler(deleteQuestion) 
 );
 export default questionRouter;

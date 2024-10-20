@@ -1,4 +1,4 @@
-import { Exam } from "../../../db/index.js";
+import { Exam, Question } from "../../../db/index.js";
 import { AppError } from "../../utils/appError.js";
 import { messages } from "../../utils/constant/messages.js";
 
@@ -91,7 +91,7 @@ export const updateExam = async (req, res, next) => {
   // Save the updated exam
   const examUpdated = await examExist.save();
   if (!examUpdated) {
-    return next(new AppError(messages.exam.failToUpdate, 500)); // Handle save failure
+    return next(new AppError(messages.exam.failToUpdate, 500)); 
   }
 
   // Send response with the updated exam
@@ -99,5 +99,73 @@ export const updateExam = async (req, res, next) => {
     message: messages.exam.updated,
     success: true,
     data: examUpdated,
+  });
+};
+
+
+// get all exams 
+export const getAllExams = async (req, res, next) => {
+  // Fetch all exams with populated questions
+  const exams = await Exam.find().populate("questions");
+
+  if (!exams) {
+    return next(new AppError(messages.exam.failToFetch, 500)); 
+  }
+
+  // Send response
+  return res.status(200).json({
+    message: messages.exam.fetchedSuccessfully,
+    success: true,
+    data: exams,
+  });
+};
+
+// get exam by id 
+export const getExamById = async (req, res, next) => {
+  // Get the exam ID from the request params
+  const { examId } = req.params;
+
+  // Find the exam by ID and populate it to questions 
+  const examExist = await Exam.findById(examId)
+    .populate('questions') 
+    // .populate('createdBy'); 
+
+  // If exam does not exist
+  if (!examExist) {
+    return next(new AppError(messages.exam.notExist, 404));
+  }
+
+  // Send response with the fetched exam
+  return res.status(200).json({
+    message: messages.exam.fetchedSuccessfully,
+    success: true,
+    data: examExist,
+  });
+};
+
+// delete exam 
+export const deleteExam = async (req, res, next) => {
+  // Get the exam ID from the request params
+  const { examId } = req.params;
+
+  // Check if the exam exists
+  const examExist = await Exam.findById(examId);
+  if (!examExist) {
+    return next(new AppError(messages.exam.notExist, 404));
+  }
+
+  // Delete all related questions that belong to the exam
+  await Question.deleteMany({ exam: examId });
+
+  // Delete the exam itself
+  const deleteExam = await Exam.findByIdAndDelete(examId);
+  if (!deleteExam) {
+    return next(new AppError(messages.exam.failToDelete, 500));
+  }
+
+  // Send response
+  return res.status(200).json({
+    message: messages.exam.deleted,
+    success: true
   });
 };
