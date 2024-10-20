@@ -13,3 +13,12 @@ export const roles = {
 };
 
 Object.freeze(roles);
+
+
+export const questionTypes = {
+  MULTIPLE_CHOICE: "multiple-choice",
+  TRUE_FALSE: "true-false",
+  SHORT_ANSWER: "short-answer",
+};
+
+Object.freeze(questionTypes);
