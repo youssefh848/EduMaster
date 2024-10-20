@@ -3,9 +3,9 @@ import { isAuthenticated } from '../../middleware/authentication.js';
 import { isAuthorized } from '../../middleware/autheraization.js';
 import { roles } from '../../utils/constant/enums.js';
 import { isValid } from '../../middleware/vaildation.js';
-import { addQuestionVal } from './question.vaildation.js';
+import { addQuestionVal, updateQuestionVal } from './question.vaildation.js';
 import { asyncHandler } from '../../middleware/asyncHandler.js';
-import { addQuestion } from './question.controller.js';
+import { addQuestion, updateQuestion } from './question.controller.js';
 
 
 const questionRouter = Router();
@@ -18,4 +18,12 @@ questionRouter.post('/',
     asyncHandler(addQuestion) 
 );
 
+
+// Update question route
+questionRouter.put("/:questionId",
+    isAuthenticated(), 
+    isAuthorized([roles.ADMIN]),  
+    isValid(updateQuestionVal), 
+    asyncHandler(updateQuestion)  
+);
 export default questionRouter;

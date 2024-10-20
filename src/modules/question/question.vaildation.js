@@ -11,3 +11,14 @@ export const addQuestionVal = joi.object({
     exam: generalFields.objectId.required(),
     points: generalFields.points.required(),
 });
+
+// Update Question validation
+export const updateQuestionVal = joi.object({
+    text: generalFields.title.optional().trim().min(5),
+    type: generalFields.type.optional(),
+    options: generalFields.options.optional(),
+    correctAnswer: generalFields.correctAnswer.optional().required(),
+    points: generalFields.points.optional().min(1),
+    exam: generalFields.objectId.optional(),
+    questionId: generalFields.objectId.required()
+});

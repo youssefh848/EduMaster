@@ -3,9 +3,9 @@ import { isAuthenticated } from "../../middleware/authentication.js";
 import { isAuthorized } from "../../middleware/autheraization.js";
 import { roles } from "../../utils/constant/enums.js";
 import { isValid } from "../../middleware/vaildation.js";
-import { addExamVal } from "./exam.validation.js";
+import { addExamVal, updateExamVal } from "./exam.validation.js";
 import { asyncHandler } from "../../middleware/asyncHandler.js";
-import { addExam } from "./exam.controller.js";
+import { addExam, updateExam } from "./exam.controller.js";
 
 const examRouter = Router();
 
@@ -16,5 +16,14 @@ examRouter.post("/",
   isValid(addExamVal), 
   asyncHandler(addExam) 
 );
+
+// Update exam route
+examRouter.put("/:examId",
+  isAuthenticated(),  
+  isAuthorized([roles.ADMIN]),  
+  isValid(updateExamVal),  
+  asyncHandler(updateExam)  
+);
+
 
 export default examRouter;
