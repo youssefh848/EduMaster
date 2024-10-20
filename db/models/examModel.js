@@ -50,21 +50,7 @@ const examSchema = new Schema(
       type: Date,
       required: true,
     },
-  },
-  {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-  },
-
-);
-
-// virtual
-examSchema.virtual('Question', {
-  localField: '_id',
-  foreignField: 'Exam',
-  ref: 'Question'
-})
+  }, { timestamps: true, });
 
 // model
 export const Exam = model("Exam", examSchema);
