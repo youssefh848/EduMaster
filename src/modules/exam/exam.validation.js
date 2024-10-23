@@ -10,8 +10,8 @@ export const addExamVal = joi.object({
   classLevel: generalFields.classLevel.required(),
   // questions: generalFields.questions.optional(),
   isPublished: generalFields.isPublished,
-  startDate: generalFields.startDate,
-  endDate: generalFields.endDate,
+  startDate: generalFields.startDate.required(),
+  endDate: generalFields.endDate.required(),
 });
 
 // Update Exam validation

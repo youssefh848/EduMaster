@@ -5,32 +5,25 @@ import { messages } from "../../utils/constant/messages.js";
 // add exam
 export const addExam = async (req, res, next) => {
   // Get data from the request
-  const { title, description, duration, questions, classLevel, isPublished } =
-    req.body;
+  const { title, description, duration, questions, classLevel, isPublished, startDate, endDate } = req.body;
 
-  // Check if exam with the same title already exists
+  // Check if an exam with the same title already exists
   const existingExam = await Exam.findOne({ title });
   if (existingExam) {
     return next(new AppError(messages.exam.alreadyExist, 400));
   }
 
-  // Set the start date to the current time
-  const startDate = new Date();
-
-  // Calculate endDate based on startDate and duration (in minutes)
-  const endDate = new Date(new Date(startDate).getTime() + duration * 60000);
-
   // Prepare data for the new exam
   const exam = new Exam({
     title,
     description,
-    duration,
+    duration, 
     questions,
     createdBy: req.authUser._id,
     classLevel,
     isPublished,
     startDate,
-    endDate,
+    endDate, 
   });
 
   // Save the exam to the database
@@ -40,7 +33,7 @@ export const addExam = async (req, res, next) => {
   }
 
   // Populate the questions field
-  const populatedExam = await createdExam.populate([{path: 'Question'}]);
+  const populatedExam = await createdExam.populate([{ path: 'questions' }]);
 
   // Send response
   return res.status(201).json({
@@ -48,6 +41,16 @@ export const addExam = async (req, res, next) => {
     success: true,
     data: populatedExam,
   });
+};
+
+// Logic for when a student starts the exam
+export const startExamForStudent = (exam, studentStartTime) => {
+// Calculate student's end time based on the start time and the exam duration
+  const studentEndTime = new Date(new Date(studentStartTime).getTime() + exam.duration * 60000);  
+  return {
+    studentStartTime,
+    studentEndTime,
+  };
 };
 
 // update exam
