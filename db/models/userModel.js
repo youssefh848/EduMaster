@@ -15,7 +15,7 @@ const userSchema = new Schema({
     },
     classLevel: {
         type: String,
-        required: true,
+        // required: true,
         enum: Object.values(highSchool)
     },
     email: {
