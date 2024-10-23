@@ -65,6 +65,12 @@ export const submitExam = async (req, res, next) => {
     return next(new AppError(messages.exam.alreadyExist, 400));
   }
 
+  // Check if the current time exceeds the exam end time
+  const now = new Date();
+  if (now > studentExam.endTime) {
+    return next(new AppError('Time for submitting the exam has expired', 400));
+  }
+
   let score = 0;
 
   // Compare answers
