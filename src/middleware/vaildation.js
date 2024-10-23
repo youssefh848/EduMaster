@@ -32,6 +32,10 @@ export const generalFields = {
     isPublished: joi.boolean().default(false),
     startDate: joi.date(),
     endDate: joi.date().greater(joi.ref("startDate")),
+    answers: joi.array().items(joi.object({
+        questionId: joi.string().hex().length(24).required(),
+        selectedAnswer: joi.string().required(),
+    })).min(1).required(),
 }
 
 export const isValid = (schema) => {
