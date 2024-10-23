@@ -52,5 +52,12 @@ const examSchema = new Schema(
     },
   }, { timestamps: true, });
 
+// virtual
+examSchema.virtual('Question',{
+  localField:'_id',
+  foreignField:'Exam',
+  ref:'Question'
+})
+
 // model
 export const Exam = model("Exam", examSchema);
