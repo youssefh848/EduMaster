@@ -37,3 +37,35 @@ export const createAdmin = async (req, res, next) => {
         data: adminCreated
     })
 }
+
+// get all admin 
+export const getAllAdmin = async (req, res, next) => {
+    // get all admin from db
+    const allAdmin = await User.find({ role: roles.ADMIN }) // [{}],[]
+    // check exist 
+    if (!allAdmin.length) {
+        return next(new AppError(messages.admin.notExist, 404));
+    }
+    // send res
+    return res.status(200).json({
+        message: messages.admin.fetchedSuccessfully,
+        success: true,
+        data: allAdmin
+    })
+}
+
+// get All User
+export const getAllUser = async (req, res, next) => {
+    // get all user 
+    const allUser = await User.find({ role: roles.USER })
+    // check existance
+    if (!allUser.length) {
+        return next(new AppError(messages.user.notExist, 404));
+    }
+    // send res
+    return res.status(200).json({
+        message: messages.user.fetchedSuccessfully,
+        success: true,
+        data: allUser
+    })
+}
