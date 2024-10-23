@@ -1,4 +1,4 @@
-import { Exam, Question, StudentExam } from "../../../db/index.js";
+import { Exam, Question, StudentExam, User } from "../../../db/index.js";
 import { AppError } from "../../utils/appError.js";
 import { messages } from "../../utils/constant/messages.js";
 
@@ -14,9 +14,9 @@ export const startExam = async (req, res, next) => {
   }
 
   // Ensure the student hasn't already started or submitted the exam
-  const existingStudentExam = await StudentExam.findOne({ 
-    student: req.authUser._id, 
-    exam: examId 
+  const existingStudentExam = await StudentExam.findOne({
+    student: req.authUser._id,
+    exam: examId
   });
 
   if (existingStudentExam && existingStudentExam.isSubmitted) {
@@ -25,7 +25,7 @@ export const startExam = async (req, res, next) => {
 
   // Calculate the end time based on the start time and duration
   const startTime = new Date();
-  const endTime = new Date(startTime.getTime() + exam.duration * 60000); 
+  const endTime = new Date(startTime.getTime() + exam.duration * 60000);
 
   // Create a new student exam entry
   const studentExam = new StudentExam({
@@ -49,11 +49,10 @@ export const startExam = async (req, res, next) => {
   });
 };
 
-
 // submit exam
 export const submitExam = async (req, res, next) => {
   const { examId } = req.params;
-  const { answers } = req.body; 
+  const { answers } = req.body;
 
   // Find the student's exam record using the authenticated user's ID
   const studentExam = await StudentExam.findOne({ student: req.authUser._id, exam: examId });
@@ -107,7 +106,6 @@ export const submitExam = async (req, res, next) => {
   });
 };
 
-
 // Get remaining time for the exam
 export const getRemainingTime = async (req, res, next) => {
   const { examId } = req.params;
@@ -140,14 +138,14 @@ export const getRemainingTime = async (req, res, next) => {
       message: 'Time is up',
       success: true,
       data: {
-        remainingTime: 0, 
+        remainingTime: 0,
       },
     });
   }
 
   // Convert remaining time to minutes and seconds
   const minutes = Math.floor(remainingTime / (1000 * 60));
-  const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000); 
+  const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
   // Send response with the calculated remaining time
   res.status(200).json({
@@ -161,3 +159,54 @@ export const getRemainingTime = async (req, res, next) => {
     },
   });
 };
+
+// get all student score
+export const getExamScore = async (req, res, next) => {
+  // get data from req
+  const { examId } = req.params;
+  const { studentName } = req.query; // Use query to filter by student name
+
+  // Prepare query based on the presence of student name
+  const query = { exam: examId }
+  // If student name is provided in the query
+  if (studentName) {
+    // Find matching students by name in the User model
+    const matchedUsers = await User.find({ fullName: { $regex: studentName, $options: 'i' } }).select('_id')
+    // If no students match the given name
+    if (!matchedUsers.length) {
+      return next(new AppError('No students found with this name', 404))
+    }
+    // Update query with matching student IDs
+    query.student = { $in: matchedUsers.map(user => user._id) };
+  }
+  const studentScores = await StudentExam.find(query)
+    .populate('student', 'fullName') // Fetch student name
+    .populate('exam', 'title') // Fetch exam information
+    .sort({ score: -1 }); // Sort by score from highest to lowest
+
+  // send res
+  res.status(200).json({
+    message: 'Exam score retrieved successfully',
+    success: true,
+    data: studentScores
+  })
+}
+
+// getStudentScore
+export const getStudentScore = async (req, res, next) => {
+  // get data from req
+  const { examId } = req.params;
+  const student = req.authUser._id;
+  // get score
+  const studentScore = await StudentExam.findOne({ exam: examId, student }).select('score')
+  // check existance
+  if (!studentScore) {
+    return next(new AppError('Student score not found', 404))
+  }
+  // send res 
+  res.status(200).json({
+    message: 'Student score retrieved successfully',
+    success: true,
+    data: studentScore
+  })
+}
