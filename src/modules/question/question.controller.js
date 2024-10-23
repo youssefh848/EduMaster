@@ -18,12 +18,27 @@ export const addQuestion = async (req, res, next) => {
     return next(new AppError(messages.question.alreadyExist, 400));
   }
 
+
+    // Ensure options are in the correct format
+    // const formattedOptions = options.map((option, index) => {
+    //     const letter = String.fromCharCode(65 + index); // A, B, C, D
+    //     return `${letter}:${option.trim()}`; // Format to "A: option", "B: option", etc.
+    //   });
+    
+      // Validate correctAnswer
+    //   const correctAnswerFormatted = correctAnswer.trim();
+    //   const correctOption = formattedOptions.find(opt => opt.startsWith(correctAnswerFormatted.charAt(0).toUpperCase()));
+    
+    //   if (!correctOption) {
+    //     return next(new AppError('Correct answer must correspond to one of the options (A, B, C, D)', 400));
+    //   }
+      
   // Create the new question
   const question = new Question({
     text,
     type,
     options: options || [],
-    correctAnswer,
+    correctAnswer /* correctAnswerFormatted*/,
     exam,
     points,
     createdBy: req.authUser._id,
