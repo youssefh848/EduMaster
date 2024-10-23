@@ -31,14 +31,14 @@ userRouter.delete('/',
 // get profile
 userRouter.get('/',
     isAuthenticated(),
-    isAuthorized([roles.USER, roles.COMPANY_HR]),
+    isAuthorized([roles.USER, roles.ADMIN]),
     asyncHandler(getProfile)
 )
 
 // update password
 userRouter.patch('/update-password',
     isAuthenticated(),
-    isAuthorized([roles.USER, roles.COMPANY_HR]),
+    isAuthorized([roles.USER, roles.ADMIN]),
     isValid(updatePasswordVal),
     asyncHandler(updatePassword)
 )

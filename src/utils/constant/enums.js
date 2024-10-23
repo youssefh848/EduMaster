@@ -10,6 +10,7 @@ Object.freeze(highSchool);
 export const roles = {
   ADMIN: "admin",
   USER: "user",
+  SUPER_ADMIN: "super-admin"
 };
 
 Object.freeze(roles);
