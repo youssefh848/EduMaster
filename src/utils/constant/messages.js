@@ -31,4 +31,5 @@ export const messages = {
     lesson: generateMessage('lesson'),
     question: generateMessage('question'),
     exam: generateMessage('exam'),
+    admin: generateMessage('admin')
 };
