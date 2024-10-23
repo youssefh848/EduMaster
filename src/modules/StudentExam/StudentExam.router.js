@@ -26,7 +26,7 @@ studentExamRouter.post('/submit/:examId',
 );
 
 // remaining time 
-studentExamRouter.get('/exams/:examId/remaining-time',
+studentExamRouter.get('/exams/remaining-time/:examId',
   isAuthenticated(),
   isAuthorized([roles.USER , roles.ADMIN]),
   asyncHandler(getRemainingTime)
