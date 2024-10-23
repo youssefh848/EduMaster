@@ -126,7 +126,7 @@ export const getRemainingTime = async (req, res, next) => {
   }
 
   // Calculate the remaining time
-  const remainingTime = studentExam.endTime - now; // remaining time in milliseconds
+  const remainingTime = studentExam.endTime - now;
 
   // If the remaining time is less than or equal to 0, the exam time is over
   if (remainingTime <= 0) {
@@ -140,8 +140,8 @@ export const getRemainingTime = async (req, res, next) => {
   }
 
   // Convert remaining time to minutes and seconds
-  const minutes = Math.floor(remainingTime / (1000 * 60)); // convert milliseconds to minutes
-  const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000); // get remaining seconds
+  const minutes = Math.floor(remainingTime / (1000 * 60));
+  const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000); 
 
   // Send response with the calculated remaining time
   res.status(200).json({
