@@ -5,7 +5,8 @@ export const addLessonVal = joi.object({
     title: generalFields.title.required(),
     description: generalFields.description.required(),
     video: generalFields.video.required(),
-    classLevel: generalFields.classLevel.required()
+    classLevel: generalFields.classLevel.required(),
+    price: generalFields.price.optional()
 })
 
 export const updateLessonVal = joi.object({
@@ -13,7 +14,8 @@ export const updateLessonVal = joi.object({
     title: generalFields.title.optional(),
     description: generalFields.description.optional(),
     video: generalFields.video.optional(),
-    classLevel: generalFields.classLevel.optional()
+    classLevel: generalFields.classLevel.optional(),
+    price: generalFields.price.optional()
 })
 
 export const getLessonByIdVal = joi.object({
@@ -23,3 +25,7 @@ export const getLessonByIdVal = joi.object({
 export const deleteLessonVal = joi.object({
     lessonId: generalFields.objectId.required()
 })
+export const payLessonVal = joi.object({
+    lessonId: generalFields.objectId.required()
+})
+
