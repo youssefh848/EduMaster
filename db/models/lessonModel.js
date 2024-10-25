@@ -22,12 +22,29 @@ const lessonSchema = new Schema({
         required: true,
         enum: Object.values(highSchool),
     },
+    price: {
+        type: Number,
+        default: 0
+    },
+    isPaid: {
+        type: Boolean,
+        default: false
+    },
     createdBy: {
         type: Types.ObjectId,
         ref: 'User',
         required: true
     }
 }, { timestamps: true })
+
+// Middleware to set isPaid based on price
+lessonSchema.pre('save', function (next) {
+    // Check if price is explicitly provided
+    if (this.price >= 0) {
+        this.isPaid = this.price > 0; // true if price > 0, false otherwise
+    }
+    next();
+});
 
 
 // model 
