@@ -1,11 +1,13 @@
+import { User } from "../../../db/index.js";
 import { Lesson } from "../../../db/models/lessonModel.js";
+import { createOrder, getAuthToken, getPaymentKey } from "../../services/payment.js";
 import { AppError } from "../../utils/appError.js";
 import { messages } from "../../utils/constant/messages.js";
 
 // add lesson 
 export const addLesson = async (req, res, next) => {
     // get data from req 
-    let { title, description, video, classLevel } = req.body;
+    let { title, description, video, classLevel, price } = req.body;
     title = title.toLowerCase()
     // check existance
     const existLesson = await Lesson.findOne({ title });
@@ -18,6 +20,7 @@ export const addLesson = async (req, res, next) => {
         description,
         video,
         classLevel,
+        price,
         createdBy: req.authUser._id
     })
     // add to db
@@ -39,7 +42,7 @@ export const addLesson = async (req, res, next) => {
 export const updateLesson = async (req, res, next) => {
     // get data from req
     const { lessonId } = req.params;
-    let { title, description, video, classLevel } = req.body;
+    let { title, description, video, classLevel, price } = req.body;
     title = title.toLowerCase()
     // check existance 
     const lessonExist = await Lesson.findById(lessonId)
@@ -56,6 +59,7 @@ export const updateLesson = async (req, res, next) => {
     if (description) lessonExist.description = description;
     if (video) lessonExist.video = video;
     if (classLevel) lessonExist.classLevel = classLevel;
+    if (price !== undefined) lessonExist.price = price;
     // save update 
     const lessonUpdated = await lessonExist.save()
     // handel fail 
@@ -127,4 +131,62 @@ export const deleteLesson = async (req, res, next) => {
         message: messages.lesson.deleted,
         success: true
     })
+}
+
+// pay lesson
+export const payLesson = async (req, res, next) => {
+    // get data from req
+    const { lessonId } = req.params;
+    const userId = req.authUser._id;
+    // check existance ,paid
+    const lesson = await Lesson.findById(lessonId);
+    if (!lesson || !lesson.isPaid) {
+        return next(new AppError("Lesson not found or it's free", 404))
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+        return next(new AppError("User not found", 404));
+    }
+
+    // أعد بيانات الفوترة بناءً على بيانات المستخدم
+    const billingData = {
+        apartment: "NA",
+        email: user.email,                    // استخدم البريد الإلكتروني للمستخدم
+        floor: "NA",
+        first_name: user.fullName,           // استخدم اسم المستخدم
+        last_name: user.fullName,
+        street: "NA",   // استخدم عنوان الشارع (افتراضاً أن لديك حقل عنوان)
+        building: "NA",
+        phone_number: user.phoneNumber,        // رقم الهاتف للمستخدم
+        shipping_method: "NA",
+       // postal_code: user.address.postalCode || "NA", // استخدم الرمز البريدي (افتراضاً أن لديك حقل عنوان)
+        city:  "Cairo",     // المدينة (استخدم القيمة الافتراضية إذا لم تكن موجودة)
+        country: "EG",                          // تأكد من أن لديك رمز البلد المناسب
+        state: "NA"
+    };
+    // acreate auth token
+    const authToken = await getAuthToken();
+    if (!authToken) {
+        return next(new AppError('Failed to authenticate with payment provider', 500));
+    }
+    // create order
+    const orderId = await createOrder(authToken, userId, lesson.price * 100);
+    if (!orderId) {
+        return next(new AppError('Failed to create order', 500));
+    }
+    // get paymentkey
+    const paymentKey = await getPaymentKey(authToken, orderId, lesson.price * 100, billingData);
+    if (!paymentKey) {
+        return next(new AppError('Failed to get payment key', 500));
+    }
+    // console.log("Generated paymentKey:", paymentKey);
+    // create url
+    const paymentUrl = `https://accept.paymob.com/api/acceptance/iframes/${process.env.IFRAME_ID}?payment_token=${paymentKey}`;
+
+    // send res 
+    res.status(200).json({
+        message: 'Payment URL generated successfully',
+        success: true,
+        paymentUrl
+    });
 }

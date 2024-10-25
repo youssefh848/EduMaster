@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { isValid } from "../../middleware/vaildation.js";
 import { asyncHandler } from "../../middleware/asyncHandler.js";
-import { addLessonVal, deleteLessonVal, getLessonByIdVal, updateLessonVal } from "./lesson.validation.js";
-import { addLesson, deleteLesson, getLessonById, getLessons, updateLesson } from "./lesson.controller.js";
+import { addLessonVal, deleteLessonVal, getLessonByIdVal, payLessonVal, updateLessonVal } from "./lesson.validation.js";
+import { addLesson, deleteLesson, getLessonById, getLessons, payLesson, updateLesson } from "./lesson.controller.js";
 import { isAuthenticated } from "../../middleware/authentication.js";
 import { isAuthorized } from "../../middleware/autheraization.js";
 import { roles } from "../../utils/constant/enums.js";
@@ -49,5 +49,12 @@ lessonRouter.delete('/:lessonId',
     asyncHandler(deleteLesson)
 )
 
+// pay lesson
+lessonRouter.post('/pay/:lessonId',
+    isAuthenticated(),
+    isAuthorized([roles.ADMIN, roles.USER]),
+    isValid(payLessonVal),
+    asyncHandler(payLesson)
+)
 
 export default lessonRouter;

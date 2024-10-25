@@ -17,10 +17,10 @@ export const generalFields = {
     objectId: joi.string().hex().length(24),
     otp: joi.string().length(6),
     title: joi.string(),
-    description: joi.string().min(10).max(1000), 
-    video: joi.string().pattern(new RegExp(/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/)), 
-    type:joi.string().valid(...Object.values(questionTypes)),
-    options:joi.array().items(joi.string()).when('type', {
+    description: joi.string().min(10).max(1000),
+    video: joi.string().pattern(new RegExp(/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/)),
+    type: joi.string().valid(...Object.values(questionTypes)),
+    options: joi.array().items(joi.string()).when('type', {
         is: questionTypes.MULTIPLE_CHOICE,
         then: joi.required(),
         otherwise: joi.forbidden(),
@@ -36,6 +36,7 @@ export const generalFields = {
         questionId: joi.string().hex().length(24).required(),
         selectedAnswer: joi.string().required(),
     })).min(1).required(),
+    price: joi.number().min(0),
 }
 
 export const isValid = (schema) => {
