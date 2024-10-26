@@ -148,20 +148,19 @@ export const payLesson = async (req, res, next) => {
         return next(new AppError("User not found", 404));
     }
 
-    // أعد بيانات الفوترة بناءً على بيانات المستخدم
+    // Construct billing data based on user information
     const billingData = {
         apartment: "NA",
-        email: user.email,                    // استخدم البريد الإلكتروني للمستخدم
+        email: user.email,                  // Use user's email
         floor: "NA",
-        first_name: user.fullName,           // استخدم اسم المستخدم
-        last_name: user.fullName,
-        street: "NA",   // استخدم عنوان الشارع (افتراضاً أن لديك حقل عنوان)
+        first_name: user.fullName,          // Use user's full name
+        last_name: 'NA',
+        street: "NA",                       // Use street address (assuming you have an address field)
         building: "NA",
-        phone_number: user.phoneNumber,        // رقم الهاتف للمستخدم
+        phone_number: user.phoneNumber,     // User's phone number
         shipping_method: "NA",
-       // postal_code: user.address.postalCode || "NA", // استخدم الرمز البريدي (افتراضاً أن لديك حقل عنوان)
-        city:  "Cairo",     // المدينة (استخدم القيمة الافتراضية إذا لم تكن موجودة)
-        country: "EG",                          // تأكد من أن لديك رمز البلد المناسب
+        city: "Cairo",                      // City (use default value if not provided)
+        country: "EG",                      // Ensure the correct country code
         state: "NA"
     };
     // acreate auth token
