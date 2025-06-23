@@ -7,7 +7,7 @@ import { messages } from "../../utils/constant/messages.js";
 // add lesson 
 export const addLesson = async (req, res, next) => {
     // get data from req 
-    let { title, description, video, classLevel, price } = req.body;
+    let { title, description, video, classLevel, price, scheduledDate } = req.body;
     title = title.toLowerCase()
     // check existance
     const existLesson = await Lesson.findOne({ title });
@@ -21,6 +21,7 @@ export const addLesson = async (req, res, next) => {
         video,
         classLevel,
         price,
+        scheduledDate,
         createdBy: req.authUser._id
     })
     // add to db
@@ -42,7 +43,7 @@ export const addLesson = async (req, res, next) => {
 export const updateLesson = async (req, res, next) => {
     // get data from req
     const { lessonId } = req.params;
-    let { title, description, video, classLevel, price } = req.body;
+    let { title, description, video, classLevel, price, scheduledDate } = req.body;
     title = title.toLowerCase()
     // check existance 
     const lessonExist = await Lesson.findById(lessonId)
@@ -60,6 +61,7 @@ export const updateLesson = async (req, res, next) => {
     if (video) lessonExist.video = video;
     if (classLevel) lessonExist.classLevel = classLevel;
     if (price !== undefined) lessonExist.price = price;
+    if (scheduledDate) lessonExist.scheduledDate = scheduledDate;
     // save update 
     const lessonUpdated = await lessonExist.save()
     // handel fail 
