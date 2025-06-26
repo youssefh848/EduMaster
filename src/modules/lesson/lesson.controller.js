@@ -2,6 +2,7 @@ import { User } from "../../../db/index.js";
 import { Lesson } from "../../../db/models/lessonModel.js";
 import { createOrder, getAuthToken, getPaymentKey } from "../../services/payment.js";
 import { AppError } from "../../utils/appError.js";
+import { roles } from "../../utils/constant/enums.js";
 import { messages } from "../../utils/constant/messages.js";
 
 // add lesson 
@@ -78,10 +79,16 @@ export const updateLesson = async (req, res, next) => {
 
 // get lessons to spesefic classLevel
 export const getLessons = async (req, res, next) => {
-    // get data from req    
-    const classLevel = req.authUser.classLevel
-    // get lessons
-    const lessons = await Lesson.find({ classLevel })
+    let lessons;
+
+    // If Admin or Super Admin ➤ fetch all lessons
+    if (req.authUser.role === roles.ADMIN) {
+        lessons = await Lesson.find();
+    } else {
+        // If regular user ➤ fetch lessons by their class level
+        const classLevel = req.authUser.classLevel;
+        lessons = await Lesson.find({ classLevel });
+    }
     // send res
     return res.status(200).json({
         message: messages.lesson.fetchedSuccessfully,

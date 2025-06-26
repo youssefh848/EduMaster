@@ -6,7 +6,7 @@ import { messages } from '../../utils/constant/messages.js';
 import { sendEmail } from '../../utils/email.js';
 import { roles } from '../../utils/constant/enums.js';
 
-// sig in
+// sign up
 export const signup = async (req, res, next) => {
     // Get data from the request
     const { fullName, email, password, phoneNumber, classLevel } = req.body;
