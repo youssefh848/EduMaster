@@ -47,7 +47,7 @@ export const signup = async (req, res, next) => {
 
     // Send response
     return res.status(201).json({
-        message: messages.user.created,
+        message: messages.user.acountCreated,
         success: true,
         data: createdUser
     });
