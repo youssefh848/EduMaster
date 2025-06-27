@@ -78,7 +78,31 @@ export const verifyAccount = async (req, res, next) => {
     }
 
     // Send success response
-    return res.status(200).json({ message: messages.user.verified, success: true });
+    return res.status(200).send(`
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f5f5f5;
+                    text-align: center;
+                    padding: 60px;
+                    color: #333;
+                }
+                h1 {
+                    color: #2e7d32;
+                }
+                p {
+                    font-size: 18px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>✅ Account Verified Successfully</h1>
+            <p>You can now log in to your account from the login page.</p>
+        </body>
+    </html>
+`);
 };
 
 // login 
