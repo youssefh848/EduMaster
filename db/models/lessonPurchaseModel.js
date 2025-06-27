@@ -24,5 +24,6 @@ const lessonPurchaseSchema = new Schema({
         required: true
     }
 }, { timestamps: true });
+lessonPurchaseSchema.index({ user: 1, lesson: 1 }, { unique: true });
 
 export const LessonPurchase = model("LessonPurchase", lessonPurchaseSchema);
