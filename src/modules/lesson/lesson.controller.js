@@ -1,6 +1,7 @@
 import { LessonPurchase, User } from "../../../db/index.js";
 import { Lesson } from "../../../db/models/lessonModel.js";
 import { createOrder, getAuthToken, getPaymentKey } from "../../services/payment.js";
+import { buildLessonFilter } from "../../utils/apiFeatures.js";
 import { AppError } from "../../utils/appError.js";
 import { roles } from "../../utils/constant/enums.js";
 import { messages } from "../../utils/constant/messages.js";
@@ -79,23 +80,35 @@ export const updateLesson = async (req, res, next) => {
 
 // get lessons to spesefic classLevel
 export const getLessons = async (req, res, next) => {
-    let lessons;
+    const { role, classLevel } = req.authUser;
 
-    // If Admin or Super Admin ➤ fetch all lessons
-    if (req.authUser.role === roles.ADMIN) {
-        lessons = await Lesson.find();
-    } else {
-        // If regular user ➤ fetch lessons by their class level
-        const classLevel = req.authUser.classLevel;
-        lessons = await Lesson.find({ classLevel });
-    }
-    // send res
-    return res.status(200).json({
-        message: messages.lesson.fetchedSuccessfully,
+    const filter = buildLessonFilter(req.query, role, classLevel);
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const sortBy = req.query.sortBy || 'createdAt';
+    const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
+
+    const lessons = await Lesson.find(filter)
+        .sort({ [sortBy]: sortOrder })
+        .skip(skip)
+        .limit(limit);
+
+    const total = await Lesson.countDocuments(filter);
+
+    res.status(200).json({
+        message: "Lessons fetched successfully",
         success: true,
-        data: lessons
-    })
-}
+        data: lessons,
+        pagination: {
+            total,
+            page,
+            totalPages: Math.ceil(total / limit),
+        }
+    });
+};
 
 // get lesson by id
 export const getLessonById = async (req, res, next) => {
