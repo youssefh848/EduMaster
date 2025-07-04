@@ -13,29 +13,29 @@ const examRouter = Router();
 examRouter.post("/",
   isAuthenticated(),
   isAuthorized([roles.ADMIN]),
-  isValid(addExamVal), 
-  asyncHandler(addExam) 
+  isValid(addExamVal),
+  asyncHandler(addExam)
 );
 
 // Update exam route
 examRouter.put("/:examId",
-  isAuthenticated(),  
-  isAuthorized([roles.ADMIN]),  
-  isValid(updateExamVal),  
-  asyncHandler(updateExam)  
+  isAuthenticated(),
+  isAuthorized([roles.ADMIN]),
+  isValid(updateExamVal),
+  asyncHandler(updateExam)
 );
 
 // Get all exams route
 examRouter.get("/",
   isAuthenticated(),
-  isAuthorized([roles.ADMIN]),
+  isAuthorized([roles.ADMIN, roles.USER]),
   asyncHandler(getAllExams)
 );
 
 
 // Get a specific exam by ID route
 examRouter.get('/get/:examId',
-  isAuthenticated(), 
+  isAuthenticated(),
   isAuthorized([roles.ADMIN, roles.USER]),
   isValid(getExamByIDVal),
   asyncHandler(getExamById)
@@ -45,8 +45,8 @@ examRouter.get('/get/:examId',
 // Delete exam route
 examRouter.delete('/:examId',
   isAuthenticated(),
-  isAuthorized([roles.ADMIN]), 
+  isAuthorized([roles.ADMIN]),
   isValid(deleteExamVal),
-  asyncHandler(deleteExam)  
+  asyncHandler(deleteExam)
 );
 export default examRouter;
