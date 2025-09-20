@@ -131,7 +131,7 @@ export const getProfile = async (req, res, next) => {
   // get data from req
   const user = req.authUser._id;
   // check existence
-  const userExist = await User.findById(user)
+  const userExist = await User.findById(user).select('-password -otp -otpExpires -__v')
   if (!userExist) {
     return next(new AppError(messages.user.notExist, 404))
   }
