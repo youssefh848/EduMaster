@@ -31,7 +31,7 @@ userRouter.delete('/',
 // get profile
 userRouter.get('/',
     isAuthenticated(),
-    isAuthorized([roles.USER, roles.ADMIN]),
+    isAuthorized([roles.USER, roles.ADMIN, roles.SUPER_ADMIN]),
     asyncHandler(getProfile)
 )
 
