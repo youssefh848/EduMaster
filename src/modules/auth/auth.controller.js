@@ -137,6 +137,7 @@ export const login = async (req, res, next) => {
     return res.status(200).json({
         message: messages.user.loginSuccessfully,
         success: true,
-        token
+        token,
+        role: user.role
     });
 };
